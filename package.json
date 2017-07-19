@@ -25,6 +25,7 @@
     "grunt-pg": "https://github.com/watsoncj/grunt-pg.git",
     "knex": "^0.12.9",
     "morgan": "^1.8.1",
+    "node-osc": "^2.1.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
@@ -33,7 +34,9 @@
     "pg": "^6.1.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "redis": "^2.7.1"
+    "redis": "^2.7.1",
+    "socket.io": "^2.0.3",
+    "socket.io-client": "^2.0.3"
   },
   "devDependencies": {
     "babel-loader": "^7.0.0",
