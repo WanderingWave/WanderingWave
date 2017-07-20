@@ -1,12 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
+import axios from 'axios';
 
 class App extends React.Component {
 
   constructor() {
     super()
     this.state = { message: 'ken' }
+  }
+
+  test() {
+    axios.post('/user', {
+        firstName: 'Fred',
+        lastName: 'Flintstone'
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 
   componentDidMount() {
@@ -24,7 +38,7 @@ class App extends React.Component {
       <h1>Hello</h1>
       <h2>{this.state.message}</h2>
       <input/>
-      <button>submit</button>
+      <button onClick={this.test.bind(this)}>submit</button>
       </div>
     )
   }

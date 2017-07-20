@@ -6,12 +6,14 @@ const PORT = process.env.port || 3000;
 var osc = require('node-osc');
 var oscServer = new osc.Server(5000);
 
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+// var server = require('http').Server(app);
 
-server.listen(PORT, () => {
+var server = app.listen(PORT, () => {
   console.log('Example app listening on port 3000!');
 });
+
+var io = require('socket.io')(server);
+
 
 io.sockets.on('connection', function(socket) {
 	console.log('hi')

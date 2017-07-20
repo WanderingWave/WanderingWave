@@ -11,19 +11,19 @@ module.exports.getAll = (req, res) => {
     });
 };
 
-// module.exports.create = (req, res) => {
-//   models.Profile.forge({ username: req.body.username, password: req.body.password })
-//     .save()
-//     .then(result => {
-//       res.status(201).send(result.omit('password'));
-//     })
-//     .catch(err => {
-//       if (err.constraint === 'users_username_unique') {
-//         return res.status(403);
-//       }
-//       res.status(500).send(err);
-//     });
-// };
+module.exports.create = (req, res) => {
+  models.Profile.forge({ username: req.body.username, password: req.body.password })
+    .save()
+    .then(result => {
+      res.status(201).send(result.omit('password'));
+    })
+    .catch(err => {
+      if (err.constraint === 'users_username_unique') {
+        return res.status(403);
+      }
+      res.status(500).send(err);
+    });
+};
 
 module.exports.getOne = (req, res) => {
   models.Profile.where({ id: req.params.id }).fetch()
