@@ -16,21 +16,27 @@ var io = require('socket.io')(server);
 
 
 io.sockets.on('connection', function(socket) {
-	console.log('hi')
+  console.log('socket', socket.id)
 
-    var map = {}
+  socket.on('testing', function(obj) {
+    console.log('hello', obj, socket.id)
+  })
 
-    oscServer.on('message', function(msg, rinfo) {
+  var map = {}
+  oscServer.on('message', function(msg, rinfo) {
 
-        //grab the pairing and add to the map
-        if (msg[0] === '/muse/config') {
-            var config = JSON.parse(msg[1])
-            map[rinfo.port] = config.serial_number.split('-')[2]
-            console.log('message', { data: msg, serial: map[rinfo.port] })
-        }
+    //grab the pairing and add to the map
+    if (msg[0] === '/muse/config') {
+      var config = JSON.parse(msg[1])
+      map[rinfo.port] = config.serial_number.split('-')[2]
+      // console.log('message', { data: msg, serial: map[rinfo.port] })
+    }
 
-        //emit information to client
-        socket.emit('hello', { data: msg, serial: map[rinfo.port] });
-    });
+    //emit information to client
+    socket.emit('museData', { data: msg, serial: map[rinfo.port] });
+
+  });
 
 });
+
+
