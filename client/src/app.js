@@ -1,48 +1,50 @@
-
+import React from 'react';
+import ReactDOM from 'react-dom';
+import io from 'socket.io-client';
+import Connect from './components/connect.jsx';
+import Waiting from './components/waiting.jsx';
+import Gameboard from './components/gameboard.jsx';
 
 class App extends React.Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props);
     this.state = {
-      nickname: null,
-      serial: null,
       connected: false,
-      matched: false
+      matched: false,
     }
   }
 
   componentDidMount() {
     this.socket = io.connect();
 
-    this.socket.on('museData', function(obj) {
-      console.log('museData', obj)
+    this.socket.on('score', function(obj) {
+      console.log('score', obj)
     });
 
     this.socket.on('matched', function(obj) {
+      console.log(obj)
       this.setState({ matched: true })
-    });
+
+    }.bind(this));
   }
 
 
-  handleConnect(nickname, serial) {
-    console.log('hi')
-    this.setState({ connected: true })
-    // this.socket.emit('connect', { nickname: nickname, serial: serial })
-  }
+  handleConnect() {
+    let name = document.getElementById('nickname').value;
+    let serial = document.getElementById('serial').value;
+    serial = serial.toUpperCase();
 
-  handleNicknameChange(evt) {
-    this.setState({
-      nickname: evt.target.value
-    });
-  }
+    console.log('handle connect called');
+    [
+      ['name', name],
+      ['serial', serial]
+    ]
+    .forEach(item => localStorage.setItem(item[0], String(item[1])));
 
-  handleSerialChange(evt) {
-    this.setState({
-      serial: evt.target.value
-    });
+    this.setState({ connected: true });
+    this.socket.emit('connectPlayers', { name, serial })
   }
-
 
   render() {
     let main = null;
