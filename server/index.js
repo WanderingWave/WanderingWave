@@ -15,7 +15,8 @@ var map = {},
   queue = [],
   dataPoints = {},
   playing = [],
-  clients = {};
+  clients = {},
+  activeClients = {}
 
 
 
@@ -48,8 +49,8 @@ oscServer.on('message', function(msg, { port }) {
   if (msg[0] === '/muse/config') {
     var config = JSON.parse(msg[1]);
     let serial = config.serial_number.split('-')[2];
-    console.log(serial)
-    console.log(clients[serial])
+    // console.log(serial)
+    // console.log(clients[serial])
     if (!clients[serial]) { return; }
 
     if (!map[port]) { // check if doesn't exist
@@ -62,7 +63,7 @@ oscServer.on('message', function(msg, { port }) {
     }
 
   } else if (msg[0] === '/muse/elements/experimental/mellow') {
-    if (!map[port]) { return; }; // port doesn't exist
+    if (!activeClients[port]) { return; }; // port doesn't exist
     dataPoints[port] = dataPoints[port] || [];
     dataPoints[port].push(msg[1]);
     // console.log('dataPoints', dataPoints)
@@ -76,26 +77,30 @@ let startPlaying = function(player1, player2) {
   player1.pair = player2;
   player2.pair = player1;
 
-  [player1, player2].forEach(player => {
+  [player1, player2].forEach((player, index) => {
     console.log('start streaming for ', player.name, ' on socket ', player.socketId);
-    io.to(player.socketId).emit('matched', player.pair.name);
+    io.to(player.socketId).emit('matched', { opponent: player.pair.name, left: !index });
   });
 
   playing.push([player1, player2]);
+  activeClients[player1.port] = true
+  activeClients[player2.port] = true
+
+  console.log('playing', playing)
+  console.log('active players', activeClients)
 };
 
-
-// set the length property
 
 // get the player's points
 let getPoints = function({ port }) {
 
   if (!dataPoints[port]) { return 0 }
-  console.log('reading from port ', port);
-  let points = dataPoints[port].reduce((sum, value) => sum + value, 0);
-  dataPoints[port] = [];
-  console.log('points', points)
-  return points;
+  console.log('before queue', dataPoints[port].length, port)
+
+  var points = dataPoints[port].shift()
+  console.log('after queue', dataPoints[port].length, port)
+
+  return points
 
 };
 
@@ -104,16 +109,25 @@ let updateGame = function() {
 
   let pointsA = 0,
     pointsB = 0;
+
   playing.forEach(([player1, player2]) => {
     pointsA = getPoints(player1);
     pointsB = getPoints(player2);
+    // console.log('points', pointsA, pointsB)
 
-    let difference = (pointsA - pointsB) % 10;
-    [player1, player2].forEach(player => io.to(player.socketId).emit('score', difference));
+    let difference = pointsA - pointsB;
+
+    [player1, player2].forEach(player => {
+      let calmScore = null
+      calmScore = getPoints(player) * 50
+      console.log('calmScore', calmScore, player.port)
+      io.to(player.socketId).emit('score', { difference, calmScore })
+    })
+
   });
 };
 
-setInterval(updateGame, 100);
+setInterval(updateGame, 200);
 
 
 
