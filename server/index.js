@@ -95,10 +95,10 @@ let startPlaying = function(player1, player2) {
 let getPoints = function({ port }) {
 
   if (!dataPoints[port]) { return 0 }
-  console.log('before queue', dataPoints[port].length, port)
+  // console.log('before queue', dataPoints[port].length, port)
 
   var points = dataPoints[port].shift()
-  console.log('after queue', dataPoints[port].length, port)
+  // console.log('after queue', dataPoints[port].length, port)
 
   return points
 
@@ -119,7 +119,7 @@ let updateGame = function() {
 
     [player1, player2].forEach(player => {
       let calmScore = null
-      calmScore = getPoints(player) * 50
+      calmScore = getPoints(player) * 100
       console.log('calmScore', calmScore, player.port)
       io.to(player.socketId).emit('score', { difference, calmScore })
     })
