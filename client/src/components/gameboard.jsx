@@ -9,11 +9,10 @@ class Gameboard extends React.Component {
     super(props);
     this.state = {
       hasWinner: false,
+      winner: '',
       cx: '570',
       cy: '225',
-      radius: '40',
-      playerA: this.props.playerA,
-      playerB: this.props.playerB
+      radius: '40'
     };
 
     // this.changeBallSize = this.changeBallSize.bind(this);
@@ -30,9 +29,9 @@ class Gameboard extends React.Component {
         this.moveTheBall(val.difference);
       } else {
         if (this.state.cx >= 1000) {
-          this.setState({ winner: 'playerA' });
+          this.setState({ winner: this.props.player1 });
         } else if (this.state.cx <= 140) {
-          this.setState({ winner: 'playerB' });
+          this.setState({ winner: this.props.player2 });
         }
       }
     }.bind(this));
@@ -47,7 +46,7 @@ class Gameboard extends React.Component {
 
   moveTheBall(val) {
     var cx = Number(this.state.cx);
-    this.setState({ cx: cx + val }, () => { console.log('this is the state data', this.state.cx); });
+    this.setState({ cx: cx + 11.5 * val }, () => { console.log('this is the state data', this.state.cx); });
     d3.select('.ball').transition().duration(100).attr('cx', this.state.cx);
   }
 
@@ -62,23 +61,38 @@ class Gameboard extends React.Component {
 
 
   render() {
+
+    const Player1 = {
+      color: 'blue',
+      float: 'left',
+      marginLeft: 50
+    };
+
+    const Player2 = {
+      color: 'blue',
+      float: 'right',
+      marginRight: 50
+    };
+
+
     if (this.state.cx < 1000 && this.state.cx > 140) {
       return (
         <div>
+          <h1 style={Player1} className="player-1">{this.props.player1}</h1>
+          <h1 style={Player2} className="player-2">{this.props.player2}</h1>
                 <svg width="1140" height="450">
-                <circle className ="ball" cx={570} cy={this.state.cy} r={this.state.radius} stroke="green" strokeWidth="4" fill="yellow" />
-                  <line x1="100" y1="25" x2="100" y2="425" style={{stroke:"rgb(255,0,0)"}} />
-                  <line x1="1040" y1="25" x2="1040" y2="425" style={{stroke:"rgb(255,0,0)"}} />
+                <circle className ="ball" cx={570} cy={this.state.cy} r={this.state.radius} stroke="blue" strokeWidth="4" fill="blue" />
+                  <line x1="100" y1="25" x2="100" y2="425" style={{stroke:"blue", strokeWidth: 10}} />
+                  <line x1="1040" y1="25" x2="1040" y2="425" style={{stroke:"blue", strokeWidth: 10}} />
                 </svg>
-                  <h1 className="player-a">Player 1 : {this.props.player1}</h1>
-                  <h1 className="player-b">Player 2 : {this.props.player2}</h1>
+                
               </div>
       );
     } else {
       return (
         <div>
-                <h1>gameover</h1>
-                <h1>{this.state.winner}</h1>
+                <h1>Gameover</h1>
+                <h3>{this.state.winner} won the game!</h3>
               </div>
       )
     }

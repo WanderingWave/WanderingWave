@@ -38,7 +38,10 @@ io.sockets.on('connection', function(socket) {
   socket.on('connectPlayers', ({ name, serial }) => {
     console.log('new player connecting... ', name, ' on serial ', serial, '\n on socket id ', socket.id);
     clients[serial] = { serial, name, socketId: socket.id };
-    // console.log(clients)
+    console.log('these are the clients', clients)
+    console.log('this is the queue', queue)
+    console.log('activeClients', activeClients)
+    console.log('who is playing', playing)
   });
 
 });
@@ -46,7 +49,16 @@ io.sockets.on('connection', function(socket) {
 //PLAYER STREAMS DATA
 oscServer.on('message', function(msg, { port }) {
 
+  // if (msg[0] === '/muse/elements/horseshoe') {
+  //   console.log(msg)
+  // }
+
+  // if (msg[0] === '/muse/elements/is_good') {
+  //   console.log(msg)
+  // }
+
   if (msg[0] === '/muse/config') {
+    console.log(msg)
     var config = JSON.parse(msg[1]);
     let serial = config.serial_number.split('-')[2];
     // console.log(serial)
@@ -86,8 +98,8 @@ let startPlaying = function(player1, player2) {
   activeClients[player1.port] = true
   activeClients[player2.port] = true
 
-  console.log('playing', playing)
-  console.log('active players', activeClients)
+  // console.log('playing', playing)
+  // console.log('active players', activeClients)
 };
 
 

@@ -24,6 +24,7 @@ class Connect extends React.Component {
                defaultValue={this.serial}
         />
         <button onClick={this.props.handleConnect}>Connect</button>
+        <button onClick={this.props.handlePlay}>Play</button>
         {/*<button onClick={this.props.handleConnect}>Paul</button>*/}
       </div>
     );

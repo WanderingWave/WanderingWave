@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import Connect from './components/connect.jsx';
 import Waiting from './components/waiting.jsx';
 import Gameboard from './components/gameboard.jsx';
+import ViewBars from './components/viewbars.jsx';
 
 class App extends React.Component {
 
@@ -30,13 +31,13 @@ class App extends React.Component {
 
       if (obj.left) {
         this.setState({
-          player2: obj.opponent,
-          player1: localStorage.getItem('name')
+          player1: localStorage.getItem('name'),
+          player2: obj.opponent
         })
       } else {
         this.setState({
-          player2: localStorage.getItem('name'),
-          player1: obj.opponent
+          player1: obj.opponent,
+          player2: localStorage.getItem('name')
         })
       }
 
@@ -73,6 +74,21 @@ class App extends React.Component {
       />
     }
 
+
+    // //NOT CONNECTED
+    // if (!this.state.connected) {
+    //   main = <Gameboard opponent={this.state.opponent}
+    //     socket={this.socket}
+    //     player1={this.state.player1}
+    //     player2={this.state.player2}/>
+    // }
+
+
+
+
+     // <ViewBars socket={this.socket}/>
+
+
     //WAITING FOR OPPONENT
     if (this.state.connected && !this.state.matched) {
       main = <Waiting />
@@ -80,11 +96,13 @@ class App extends React.Component {
 
     //READY TO PLAY
     if (this.state.connected && this.state.matched) {
-      main = <Gameboard opponent={this.state.opponent}
-      socket={this.socket}
-      player1={this.state.player1}
-      player2={this.state.player2}
-      />
+      main =
+        <div>
+        <Gameboard opponent={this.state.opponent}
+        socket={this.socket}
+        player1={this.state.player1}
+        player2={this.state.player2}/>
+      </div>
     }
 
     return (
