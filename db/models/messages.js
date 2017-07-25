@@ -1,6 +1,5 @@
 const db = require('../');
 
-module.exports = db.model('Message', Message);
 const Messages = db.Model.extend({
   tableName: 'messages'
 });
