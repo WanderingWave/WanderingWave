@@ -85,7 +85,7 @@ class Gameboard extends React.Component {
                   <line x1="100" y1="25" x2="100" y2="425" style={{stroke:"blue", strokeWidth: 10}} />
                   <line x1="1040" y1="25" x2="1040" y2="425" style={{stroke:"blue", strokeWidth: 10}} />
                 </svg>
-                
+
               </div>
       );
     } else {
@@ -94,43 +94,9 @@ class Gameboard extends React.Component {
                 <h1>Gameover</h1>
                 <h3>{this.state.winner} won the game!</h3>
               </div>
-      )
+      );
     }
   }
 };
 
-
 export default Gameboard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from 'react';
-
-// class Gameboard extends React.Component {
-
-//   constructor(props) {
-//     super(props);
-//     this.opponent = props.opponent;
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//         <h1>You must be more calm than {this.opponent}</h1>
-//         <h1> Gameboard goes here </h1>
-//       </div>
-//     );
-//   }
-// }
-
-// export default Gameboard;

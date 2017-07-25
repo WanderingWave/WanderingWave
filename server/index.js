@@ -4,7 +4,6 @@ const db = require('../db');
 const PORT = process.env.port || 3000;
 var osc = require('node-osc');
 
-//APP
 let server = app.listen(PORT, () => {
   console.log('Example app listening on port 3000!');
 });
@@ -70,6 +69,7 @@ let startPlaying = function(player1, player2) {
   console.log('game started for players');
   console.log('player1 ', player1);
   console.log('player2 ', player2);
+
   player1.pair = player2;
   player2.pair = player1;
 
@@ -120,4 +120,3 @@ let updateGame = function() {
 };
 
 setInterval(updateGame, 200);
-

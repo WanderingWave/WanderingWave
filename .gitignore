@@ -1,4 +1,5 @@
 # Project specific
+config/
 config/development.json
 config/production.json
 config/staging.json
@@ -28,7 +29,8 @@ coverage
 
 # Compiled Dirs (http://nodejs.org/api/addons.html)
 build/
-dist/
+public/dist/bundle.js
+*.zip
 
 # Dependency directorys
 # Deployed apps should consider commenting these lines out:

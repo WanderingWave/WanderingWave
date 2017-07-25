@@ -1,0 +1,6 @@
+
+input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: lightgray;
+}
+
+#serial {text-transform: uppercase;}

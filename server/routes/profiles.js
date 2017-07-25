@@ -10,7 +10,7 @@ router.route('/')
 
 router.route('/:id')
   .get(ProfileController.getOne)
-  .put(ProfileController.update)
+  // .put(ProfileController.update)
   // .delete(ProfileController.deleteOne)
   ;
 

@@ -1,23 +1,28 @@
 const models = require('../../db/models');
 
-module.exports.create = (req, res) => {
-  console.log('MODELS', models)
-  console.log('MESSAGES', models.Message)
-  console.log(typeof req.body.firstName)
-  models.Message.forge({ name: req.body.firstName })
-    .save()
-    .then(result => {
-      console.log('success')
-      res.status(201).send(result.omit('password'));
+module.exports.getAll = (req, res) => {
+  models.Messages.fetchAll()
+    .then(messages => {
+      res.status(200).send(messages);
     })
     .catch(err => {
-      console.log('error')
+      // This code indicates an outside service (the database) did not respond in time
+      res.status(503).send(err);
+    });
+};
+
+module.exports.create = (req, res) => {
+  models.Messages.forge({ message: req.body.message})
+    .save()
+    .then(result => {
+      console.log('this is the result of creating a message ', result);
+      res.status(201).send();
+    })
+    .catch(err => {
+      console.log('some error creating a message');
       if (err.constraint === 'users_username_unique') {
         return res.status(403);
       }
       res.status(500).send(err);
     });
 };
-
-
-// /WanderingWave/server/controllers/messages.j

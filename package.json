@@ -4,18 +4,26 @@
   "scripts": {
     "postinstall": "curl -s https://raw.githubusercontent.com/reactorcore/pomander/master/bin/install | bash",
     "start": "nodemon server",
+    "debug": "nodemon --inspect server",
+    "debug-brk": "nodemon --debug-brk --inspect server",
     "test": "NODE_ENV=test grunt test",
-    "build": "webpack --watch"
+    "build": "webpack --watch",
+    "main": "server/index.js"
   },
   "author": "Hack Reactor",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
     "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.0",
+    "babel-preset-latest": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
     "bcrypt-nodejs": "^0.0.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "bookshelf": "^0.10.3",
+    "chai": "^3.5.0",
     "config": "^1.26.1",
     "connect-flash": "^0.1.1",
     "connect-redis": "^3.2.0",
@@ -24,15 +32,20 @@
     "ejs": "^2.5.6",
     "express": "^4.15.2",
     "express-session": "^1.15.1",
+    "grunt": "~0.4.5",
+    "grunt-eslint": "^19.0.0",
+    "grunt-mocha-test": "^0.13.2",
+    "fs": "^0.0.1-security",
     "grunt-pg": "https://github.com/watsoncj/grunt-pg.git",
+    "is-utf8": "^0.2.1",
     "knex": "^0.12.9",
+    "mocha": "^3.2.0",
     "morgan": "^1.8.1",
+    "node": "^0.0.0",
+    "node-mocks-http": "^1.6.1",
     "node-osc": "^2.1.0",
     "passport": "^0.3.2",
-    "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
-    "passport-local": "^1.0.0",
-    "passport-twitter": "^1.0.4",
     "pg": "^6.1.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
@@ -47,8 +60,6 @@
     "babel-preset-latest": "^6.24.0",
     "babel-preset-react": "^6.23.0",
     "chai": "^3.5.0",
-    "grunt": "~0.4.5",
-    "grunt-eslint": "^19.0.0",
     "grunt-mocha-test": "^0.13.2",
     "mocha": "^3.2.0",
     "node-mocks-http": "^1.6.1",
@@ -56,6 +67,10 @@
     "webpack": "^2.3.2",
     "webpack-dev-server": "^2.4.2"
   },
+  "engines": {
+    "node": "^0.0.0"
+  },
+  "devDependencies": {},
   "babel": {
     "plugins": [
       "transform-es2015-modules-commonjs"

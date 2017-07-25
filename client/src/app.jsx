@@ -72,6 +72,7 @@ class App extends React.Component {
 
     this.setState({ connected: true });
     this.socket.emit('connectPlayers', { name: this.state.name, serial: this.state.serial });
+
   }
 
   render() {
@@ -94,6 +95,7 @@ class App extends React.Component {
         <div>
       <Waiting />
       </div>;
+
     }
 
     //READY TO PLAY
@@ -106,7 +108,6 @@ class App extends React.Component {
         player2={this.state.player2}/>
       </div>;
     }
-
     return (
       <div>
       {main}

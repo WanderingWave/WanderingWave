@@ -2,7 +2,6 @@ import webpack from 'webpack';
 import path from 'path';
 
 const config = {
-
   entry: './client/src/app.jsx',
   output: {
     path: path.join(__dirname, 'public/dist'),

@@ -4,8 +4,8 @@ class Connect extends React.Component {
 
   constructor(props) {
     super(props);
-    this.name = localStorage.getItem('name') || '',
-      this.serial = localStorage.getItem('serial') || ''
+    this.name = localStorage.getItem('name') || '';
+    this.serial = localStorage.getItem('serial') || '';
   }
 
   render() {

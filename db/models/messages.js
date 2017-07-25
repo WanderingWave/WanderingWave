@@ -1,10 +1,8 @@
 const db = require('../');
 
-const Message = db.Model.extend({
+module.exports = db.model('Message', Message);
+const Messages = db.Model.extend({
   tableName: 'messages'
-  // auths: function() {
-  //   return this.hasMany('Auth');
-  // }
 });
 
-module.exports = db.model('Message', Message);
+module.exports = db.model('Messages', Messages);
