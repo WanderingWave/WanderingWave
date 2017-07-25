@@ -15,36 +15,40 @@ class App extends React.Component {
       matched: false,
       opponent: '',
       player1: '',
-      player2: ''
-    }
+      player2: '',
+      name: '',
+      serial: ''
+    };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.socket = io.connect();
 
     this.socket.on('matched', function(obj) {
-      console.log(obj)
+      console.log(obj);
       this.setState({
         matched: true,
         opponent: obj.opponent
-      })
+      });
 
       if (obj.left) {
         this.setState({
           player1: localStorage.getItem('name'),
           player2: obj.opponent
-        })
+        });
       } else {
         this.setState({
           player1: obj.opponent,
           player2: localStorage.getItem('name')
-        })
+        });
       }
-
-
     }.bind(this));
-  }
 
+    this.socket.on('testConnection', function(currentConnection) {
+      console.log('current connection is ', currentConnection);
+    });
+
+  }
 
   handleConnect() {
 
@@ -52,6 +56,7 @@ class App extends React.Component {
     let serial = document.getElementById('serial').value;
 
     serial = serial.toUpperCase();
+    this.setState({name, serial});
 
     console.log('handle connect called');
     [
@@ -60,8 +65,13 @@ class App extends React.Component {
     ]
     .forEach(item => localStorage.setItem(item[0], String(item[1])));
 
+    this.socket.emit('streamConnection', { name, serial });
+  }
+
+  handlePlay() {
+
     this.setState({ connected: true });
-    this.socket.emit('connectPlayers', { name, serial })
+    this.socket.emit('connectPlayers', { name: this.state.name, serial: this.state.serial });
   }
 
   render() {
@@ -69,29 +79,21 @@ class App extends React.Component {
 
     //NOT CONNECTED
     if (!this.state.connected) {
-      main = <Connect
+      main =
+      <div>
+      {/*<ViewBars socket={this.socket}/>*/}
+      <Connect
+      handlePlay={this.handlePlay.bind(this)}
       handleConnect={this.handleConnect.bind(this)}
       />
+      </div>;
     }
-
-
-    // //NOT CONNECTED
-    // if (!this.state.connected) {
-    //   main = <Gameboard opponent={this.state.opponent}
-    //     socket={this.socket}
-    //     player1={this.state.player1}
-    //     player2={this.state.player2}/>
-    // }
-
-
-
-
-     // <ViewBars socket={this.socket}/>
-
-
     //WAITING FOR OPPONENT
     if (this.state.connected && !this.state.matched) {
-      main = <Waiting />
+      main =
+        <div>
+      <Waiting />
+      </div>;
     }
 
     //READY TO PLAY
@@ -102,14 +104,14 @@ class App extends React.Component {
         socket={this.socket}
         player1={this.state.player1}
         player2={this.state.player2}/>
-      </div>
+      </div>;
     }
 
     return (
       <div>
       {main}
       </div>
-    )
+    );
   }
 }
 

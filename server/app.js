@@ -26,9 +26,8 @@ app.use('/api', routes.api);
 app.use('/api/profiles', routes.profiles);
 
 app.post('/user', (req, res) => {
- messageController.create(req, res)
-  // console.log(req.body) //undefined
-  res.end("Successful Test")
-})
+  messageController.create(req, res);
+  res.end("Successful Test");
+});
 
 module.exports = app;

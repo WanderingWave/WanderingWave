@@ -16,32 +16,27 @@ var map = {},
   dataPoints = {},
   playing = [],
   clients = {},
-  activeClients = {}
-
-
-
-// map =
-// {
-//   '52940': {
-//     serial: '5394',
-//     name: 'Ken',
-//     socketId: 'IjqoVDsd3aVWjVEOAAAB',
-//     port: 52940
-//   }
-// }
-
-
+  activeClients = {};
 
 //PLAYER CONNECTS
 io.sockets.on('connection', function(socket) {
 
-  socket.on('connectPlayers', ({ name, serial }) => {
-    console.log('new player connecting... ', name, ' on serial ', serial, '\n on socket id ', socket.id);
-    clients[serial] = { serial, name, socketId: socket.id };
-    console.log('these are the clients', clients)
-    console.log('this is the queue', queue)
-    console.log('activeClients', activeClients)
-    console.log('who is playing', playing)
+  socket.on('streamConnection', ({ name, serial }) => {
+    console.log('connection starting to stream');
+    clients[serial] = { serial, name, socketId: socket.id, isPlaying: false };
+
+  });
+
+  socket.on('connectPlayers', ({ serial }) => {
+    console.log('clients serial is ', serial, ' client is ', clients[serial]);
+    if(!clients[serial] || clients[serial].isPlaying) { return; } // if no client or client is playing, end
+
+    console.log('connecting serial ', clients[serial]);
+    clients[serial].isPlaying = true;
+    queue.push(clients[serial]); // new player, add to queue
+    if (queue.length >= 2) {
+      startPlaying(queue.shift(), queue.shift());
+    }
   });
 
 });
@@ -49,36 +44,25 @@ io.sockets.on('connection', function(socket) {
 //PLAYER STREAMS DATA
 oscServer.on('message', function(msg, { port }) {
 
-  // if (msg[0] === '/muse/elements/horseshoe') {
-  //   console.log(msg)
-  // }
-
-  // if (msg[0] === '/muse/elements/is_good') {
-  //   console.log(msg)
-  // }
-
   if (msg[0] === '/muse/config') {
-    console.log(msg)
     var config = JSON.parse(msg[1]);
     let serial = config.serial_number.split('-')[2];
-    // console.log(serial)
-    // console.log(clients[serial])
     if (!clients[serial]) { return; }
 
     if (!map[port]) { // check if doesn't exist
       map[port] = clients[serial];
       map[port].port = port;
-      queue.push(map[port]); // new player, add to queue
-      if (queue.length >= 2) {
-        startPlaying(queue.shift(), queue.shift());
-      }
     }
 
   } else if (msg[0] === '/muse/elements/experimental/mellow') {
-    if (!activeClients[port]) { return; }; // port doesn't exist
+
+    // if (!activeClients[port]) { return; }; // port doesn't exist
+    if(!map[port]) { return; }
+    if(!map[port].isPlaying) { // client is not playing yet. stream them just their data
+      io.to(map[port].socketId).emit('testConnection', msg[1] * 100);
+    }
     dataPoints[port] = dataPoints[port] || [];
     dataPoints[port].push(msg[1]);
-    // console.log('dataPoints', dataPoints)
   }
 });
 
@@ -95,24 +79,21 @@ let startPlaying = function(player1, player2) {
   });
 
   playing.push([player1, player2]);
-  activeClients[player1.port] = true
-  activeClients[player2.port] = true
-
-  // console.log('playing', playing)
-  // console.log('active players', activeClients)
+  // activeClients[player1.port] = true
+  // activeClients[player2.port] = true
 };
 
 
 // get the player's points
 let getPoints = function({ port }) {
 
-  if (!dataPoints[port]) { return 0 }
+  if (!dataPoints[port]) { return 0; }
   // console.log('before queue', dataPoints[port].length, port)
 
-  var points = dataPoints[port].shift()
+  var points = dataPoints[port].shift();
   // console.log('after queue', dataPoints[port].length, port)
 
-  return points
+  return points;
 
 };
 
@@ -125,65 +106,18 @@ let updateGame = function() {
   playing.forEach(([player1, player2]) => {
     pointsA = getPoints(player1);
     pointsB = getPoints(player2);
-    // console.log('points', pointsA, pointsB)
 
     let difference = pointsA - pointsB;
 
     [player1, player2].forEach(player => {
-      let calmScore = null
-      calmScore = getPoints(player) * 100
-      console.log('calmScore', calmScore, player.port)
-      io.to(player.socketId).emit('score', { difference, calmScore })
-    })
+      let calmScore = null;
+      calmScore = getPoints(player) * 100;
+      console.log('calmScore', calmScore, player.port);
+      io.to(player.socketId).emit('score', { difference, calmScore });
+    });
 
   });
 };
 
 setInterval(updateGame, 200);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// io.sockets.on('connection', function(socket) {
-//   console.log('socket', socket.id)
-
-//   socket.on('testing', function(obj) {
-//     console.log('hello', obj, socket.id)
-//   })
-
-//   var map = {}
-//   oscServer.on('message', function(msg, rinfo) {
-
-//     //grab the pairing and add to the map
-//     if (msg[0] === '/muse/config') {
-//       var config = JSON.parse(msg[1])
-//       map[rinfo.port] = config.serial_number.split('-')[2]
-//       // console.log('message', { data: msg, serial: map[rinfo.port] })
-//     }
-
-//     //emit information to client
-//     socket.emit('museData', { data: msg, serial: map[rinfo.port] });
-
-//   });
-
-// });
