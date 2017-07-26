@@ -43,6 +43,10 @@ io.sockets.on('connection', function(socket) {
 //PLAYER STREAMS DATA
 oscServer.on('message', function(msg, { port }) {
 
+  // if (msg[0] === '/muse/elements/horseshoe') {
+  //   console.log(msg)
+  // }
+
   if (msg[0] === '/muse/config') {
     var config = JSON.parse(msg[1]);
     let serial = config.serial_number.split('-')[2];
@@ -53,18 +57,28 @@ oscServer.on('message', function(msg, { port }) {
       map[port].port = port;
     }
 
-  } else if (msg[0] === '/muse/elements/experimental/mellow') {
+  } else {
 
-    // if (!activeClients[port]) { return; }; // port doesn't exist
-    if (!map[port]) { return; }
-    if (!map[port].isPlaying) { // client is not playing yet. stream them just their data
-      io.to(map[port].socketId).emit('testConnection', msg[1] * 100);
+    if (msg[0] === '/muse/elements/experimental/mellow') {
+
+      // if (!activeClients[port]) { return; }; // port doesn't exist
+      if (!map[port]) { return; }
+      if (!map[port].isPlaying) { // client is not playing yet. stream them just their data
+        io.to(map[port].socketId).emit('testConnection', msg[1] * 100);
+      }
+      dataPoints[port] = dataPoints[port] || [];
+      dataPoints[port].push(msg[1]);
     }
-    dataPoints[port] = dataPoints[port] || [];
-    dataPoints[port].push(msg[1]);
-  }
 
-});
+    if (msg[0] === '/muse/elements/horseshoe') {
+      if (!map[port]) { return; }
+      if (!map[port].isPlaying) { // client is not playing yet. stream them just their data
+        io.to(map[port].socketId).emit('signalStrength', [msg[1], msg[2], msg[3], msg[4]]);
+      }
+    }
+  }
+})
+
 
 let startPlaying = function(player1, player2) {
   console.log('game started for players');
@@ -88,7 +102,7 @@ let startPlaying = function(player1, player2) {
 // get the player's points
 let getPoints = function({ port }) {
 
-  if (!dataPoints[port]) { return 0; }
+  if (!dataPoints[port] || !dataPoints[port].length) { return 0; }
   // console.log('before queue', dataPoints[port].length, port)
 
   var points = dataPoints[port].shift();

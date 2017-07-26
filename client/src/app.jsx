@@ -5,6 +5,7 @@ import Connect from './components/connect.jsx';
 import Waiting from './components/waiting.jsx';
 import Gameboard from './components/gameboard.jsx';
 import ViewBars from './components/viewbars.jsx';
+import Signal from './components/signal.jsx'
 
 class App extends React.Component {
 
@@ -48,10 +49,6 @@ class App extends React.Component {
       console.log('current connection is ', currentConnection);
     });
 
-    this.socket.on('signalStrength', function(signalStrength) {
-      console.log('current signalStrength is', signalStrength);
-    });
-
   }
 
   handleConnect() {
@@ -85,13 +82,23 @@ class App extends React.Component {
     //NOT CONNECTED
     if (!this.state.connected) {
       main =
-        <div>
-          {<ViewBars socket={this.socket}/>}
-          <Connect
-            handlePlay={this.handlePlay.bind(this)}
-            handleConnect={this.handleConnect.bind(this)}
-          />
-        </div>;
+// <<<<<<< HEAD
+//         <div>
+//           {<ViewBars socket={this.socket}/>}
+//           <Connect
+//             handlePlay={this.handlePlay.bind(this)}
+//             handleConnect={this.handleConnect.bind(this)}
+//           />
+//         </div>;
+// =======
+      <div>
+      <Connect
+      handlePlay={this.handlePlay.bind(this)}
+      handleConnect={this.handleConnect.bind(this)}
+      />
+      <Signal socket={this.socket}/>
+      </div>;
+// >>>>>>> upstream/master
     }
     //WAITING FOR OPPONENT
     if (this.state.connected && !this.state.matched) {
