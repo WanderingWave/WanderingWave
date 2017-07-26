@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import 'jqueryui';
+import { createStore } from 'redux';
 
 
 class ViewBars extends React.Component {
@@ -37,12 +38,12 @@ class ViewBars extends React.Component {
   easeBars () {
     setInterval( () => {
       this.updateBars();
-    }, 250)
+    }, 250);
   }
 
   updateBars () {
     console.log('this.updateBars called');
-    let val = this.state.p1 - this.state.p2
+    let val = this.state.p1 - this.state.p2;
     val = Math.abs(val);
     val = val * 2.55;
     val = Number.parseInt(val);

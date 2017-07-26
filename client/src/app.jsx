@@ -67,7 +67,7 @@ class App extends React.Component {
       ['name', name],
       ['serial', serial]
     ]
-    .forEach(item => localStorage.setItem(item[0], String(item[1])));
+      .forEach(item => localStorage.setItem(item[0], String(item[1])));
 
     this.socket.emit('streamConnection', { name, serial });
   }
@@ -86,19 +86,19 @@ class App extends React.Component {
     if (!this.state.connected) {
       main =
         <div>
-      {<ViewBars socket={this.socket}/>}
-      <Connect
-      handlePlay={this.handlePlay.bind(this)}
-      handleConnect={this.handleConnect.bind(this)}
-      />
-      </div>;
+          {<ViewBars socket={this.socket}/>}
+          <Connect
+            handlePlay={this.handlePlay.bind(this)}
+            handleConnect={this.handleConnect.bind(this)}
+          />
+        </div>;
     }
     //WAITING FOR OPPONENT
     if (this.state.connected && !this.state.matched) {
       main =
         <div>
-      <Waiting />
-      </div>;
+          <Waiting />
+        </div>;
 
     }
 
@@ -106,15 +106,15 @@ class App extends React.Component {
     if (this.state.connected && this.state.matched) {
       main =
         <div>
-        <Gameboard opponent={this.state.opponent}
-        socket={this.socket}
-        player1={this.state.player1}
-        player2={this.state.player2}/>
-      </div>;
+          <Gameboard opponent={this.state.opponent}
+            socket={this.socket}
+            player1={this.state.player1}
+            player2={this.state.player2}/>
+        </div>;
     }
     return (
       <div>
-      {main}
+        {main}
       </div>
     );
   }
