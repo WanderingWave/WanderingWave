@@ -86,7 +86,7 @@ class App extends React.Component {
     if (!this.state.connected) {
       main =
         <div>
-      {/*<ViewBars socket={this.socket}/>*/}
+      {<ViewBars socket={this.socket}/>}
       <Connect
       handlePlay={this.handlePlay.bind(this)}
       handleConnect={this.handleConnect.bind(this)}

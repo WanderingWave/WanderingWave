@@ -4,3 +4,8 @@ input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
 }
 
 #serial {text-transform: uppercase;}
+
+.ui-progressbar .ui-progressbar-value {
+    margin: 0px;
+    height: 100%;
+}
