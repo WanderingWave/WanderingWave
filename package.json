@@ -8,7 +8,8 @@
     "debug-brk": "nodemon --debug-brk --inspect server",
     "test": "NODE_ENV=test grunt test",
     "build": "webpack --watch",
-    "main": "server/index.js"
+    "main": "server/index.js",
+    "electron": "electron main.js"
   },
   "author": "Hack Reactor",
   "license": "MIT",
@@ -30,6 +31,8 @@
     "cookie-parser": "^1.4.3",
     "d3": "^4.10.0",
     "ejs": "^2.5.6",
+    "electron": "^1.6.11",
+    "electron-prebuilt": "^1.4.13",
     "express": "^4.15.2",
     "express-session": "^1.15.1",
     "fs": "^0.0.1-security",

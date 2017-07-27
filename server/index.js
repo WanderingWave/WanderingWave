@@ -4,6 +4,9 @@ const db = require('../db');
 const PORT = process.env.port || 3000;
 var osc = require('node-osc');
 
+// const remote = require('electron').remote
+// const main = remote.require('../main.js')
+
 let server = app.listen(PORT, () => {
   console.log('Example app listening on port 3000!');
 });
@@ -21,6 +24,10 @@ var map = {},
 io.sockets.on('connection', function(socket) {
 
   socket.on('streamConnection', ({ name, serial }) => {
+
+
+    // main.openTerminal()
+
     console.log('connection starting to stream');
     clients[serial] = { serial, name, socketId: socket.id, isPlaying: false };
 

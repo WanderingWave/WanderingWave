@@ -5,7 +5,9 @@ import Connect from './components/connect.jsx';
 import Waiting from './components/waiting.jsx';
 import Gameboard from './components/gameboard.jsx';
 import ViewBars from './components/viewbars.jsx';
-import Signal from './components/signal.jsx'
+import Signal from './components/signal.jsx';
+
+// const remote = require('electron').remote
 
 class App extends React.Component {
 
@@ -52,7 +54,7 @@ class App extends React.Component {
   }
 
   handleConnect() {
-
+    // remote.openTerminal()
     let name = document.getElementById('nickname').value;
     let serial = document.getElementById('serial').value;
 
@@ -67,6 +69,7 @@ class App extends React.Component {
     .forEach(item => localStorage.setItem(item[0], String(item[1])));
 
     this.socket.emit('streamConnection', { name, serial });
+
   }
 
   handlePlay() {
@@ -82,7 +85,7 @@ class App extends React.Component {
     //NOT CONNECTED
     if (!this.state.connected) {
       main =
-      <div>
+        <div>
       <Connect
       handlePlay={this.handlePlay.bind(this)}
       handleConnect={this.handleConnect.bind(this)}

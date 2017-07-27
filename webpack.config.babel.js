@@ -3,6 +3,7 @@ import path from 'path';
 
 const config = {
   entry: './client/src/app.jsx',
+  // target: 'electron-main',
   output: {
     path: path.join(__dirname, 'public/dist'),
     filename: 'bundle.js'
@@ -23,5 +24,6 @@ const config = {
     ]
   }
 };
+
 
 export default config;
