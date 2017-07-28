@@ -5,7 +5,7 @@ import 'jqueryui';
 class ViewBarsSingle extends React.Component {
 
   constructor (props) {
-    ViewBarsSingle.queue = Array(20).fill(50)
+    ViewBarsSingle.queue = Array(20).fill(50);
     super(props);
     this.state = {
       p1: 0,
@@ -26,7 +26,7 @@ class ViewBarsSingle extends React.Component {
 
   componentDidMount () {
     this.props.socket.on('testConnection', function(val) {
-      console.log("testConnection", val)
+      console.log('testConnection', val);
       this.setState({ p1: val});
       this.ease();
     }.bind(this));
@@ -41,14 +41,10 @@ class ViewBarsSingle extends React.Component {
 
   ease () {
     let p1 = this.state.p1;
-
     ViewBarsSingle.queue.push(p1);
     ViewBarsSingle.queue.shift();
-
-    let avg = this.takeAverage()
-
+    let avg = this.takeAverage();
     console.log(p1);
-
     this.run(avg);
   }
 

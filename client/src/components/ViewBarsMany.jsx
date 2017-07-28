@@ -25,7 +25,6 @@ class ViewBarsMany extends React.Component {
 
   componentDidMount () {
     this.props.socket.on('testConnection', function(val) {
-      console.log("testConnection", val)
       this.setState({ p1: val});
       this.run();
     }.bind(this));
@@ -83,6 +82,7 @@ class ViewBarsMany extends React.Component {
       </div>
     );
   }
+
 }
 
 // new ViewBars()
