@@ -46,7 +46,7 @@ class App extends React.Component {
     }.bind(this));
 
     this.socket.on('testConnection', function(currentConnection) {
-      console.log('current connection is ', currentConnection);
+      // console.log('current connection is ', currentConnection);
     });
 
   }
