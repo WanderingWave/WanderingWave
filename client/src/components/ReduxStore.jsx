@@ -20,7 +20,6 @@ const middleWare = applyMiddleware(logger, error);
 
 // f1
 const uReducer = function(state = { u1: '', u2: '' }, action ) {
-  // configure Bable compile ES7 spread operator
   // const newState = {...state};
   let newState = Object.assign({}, state);
   return newState;
@@ -28,6 +27,7 @@ const uReducer = function(state = { u1: '', u2: '' }, action ) {
 
 // f2
 const pReducer = function (state = { p1: 0, p2: 0 }, action) {
+  // const newState = {...state};
   let newState = Object.assign({}, state);
   if (action.type === 'test') {
 
