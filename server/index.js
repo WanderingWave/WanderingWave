@@ -42,6 +42,8 @@ io.sockets.on('connection', function(socket) {
 
 //PLAYER STREAMS DATA
 oscServer.on('message', function(msg, { port }) {
+  console.log('MSG', msg);
+  console.log('PORT', port);
 
   // if (msg[0] === '/muse/elements/horseshoe') {
   //   console.log(msg)
@@ -68,6 +70,22 @@ oscServer.on('message', function(msg, { port }) {
       }
       dataPoints[port] = dataPoints[port] || [];
       dataPoints[port].push(msg[1]);
+    }
+
+    // send concenentration points
+    if (msg[0] === '/muse/elements/experimental/concentration') {
+      if (!map[port]) { return; }
+      if (!map[port].isPlaying) {
+        io.to(map[port].socketId).emit('experimentalConcentration', msg[1] * 100);
+      }
+    }
+
+    // send raw EEG data - baller!
+    if (msg[0] === '/muse/elements/raw_fft0') {
+      if (!map[port]) { return; }
+      if (!map[port].isPlaying) {
+        io.to(map[port].socketId).emit('rawFFT0', msg);
+      }
     }
 
     if (msg[0] === '/muse/elements/horseshoe') {
