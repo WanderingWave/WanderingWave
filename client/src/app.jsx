@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import Connect from './components/connect.jsx';
 import Waiting from './components/waiting.jsx';
 import Gameboard from './components/gameboard.jsx';
-import ViewBars from './components/viewbars.jsx';
+import ViewBarsSingle from './components/ViewBarsSingle.jsx';
 import Signal from './components/signal.jsx'
 
 class App extends React.Component {
@@ -97,6 +97,8 @@ class App extends React.Component {
       handleConnect={this.handleConnect.bind(this)}
       />
       <Signal socket={this.socket}/>
+      <ViewBarsSingle socket={this.socket}/>
+
       </div>;
 // >>>>>>> upstream/master
     }

@@ -1,19 +1,16 @@
 import React from 'react';
 import $ from 'jquery';
 import 'jqueryui';
-import { createStore } from 'redux';
 
-
-class ViewBars extends React.Component {
+class ViewBarsMany extends React.Component {
 
   constructor (props) {
     super(props);
     this.state = {
       p1: 0,
       p2: 0,
-      players: 1
     };
-    this.makeData(1000);
+    // this.makeData(1000);
   }
 
   makeData (i) {
@@ -27,23 +24,31 @@ class ViewBars extends React.Component {
   }
 
   componentDidMount () {
-    console.log('viewbars mounted');
-    this.props.socket.on('score', function(val) {
-      this.setState({ p1: val.calmScore });
-      this.updateBars();
+    this.props.socket.on('testConnection', function(val) {
+      console.log("testConnection", val)
+      this.setState({ p1: val});
+      this.run();
     }.bind(this));
-    // this.easeBars();
+  }
+
+  run () {
+    let p1 = this.state.p1;
+    let p2 = this.state.p2;
+    let color = this.blue;
+
+    this.updateBars(p1, p2);
+    this.setColor(color);
+    this.setSize(p1, p2);
   }
 
   easeBars () {
     setInterval( () => {
-      this.updateBars();
+      this.run();
     }, 250);
   }
 
-  updateBars () {
-    console.log('this.updateBars called');
-    let val = this.state.p1 - this.state.p2;
+  updateBars (p1, p2) {
+    let val = p1 - p2;
     val = Math.abs(val);
     val = val * 2.55;
     val = Number.parseInt(val);
@@ -51,46 +56,34 @@ class ViewBars extends React.Component {
     val = val.toString(16);
     val = '#0000' + val;
     this.blue = val;
-    this.setColor();
   }
 
-  setColor () {
-    console.log(this.blue);
+  setColor (blue) {
     $('#p1').css({ 'background': '#ffffff'});
-    $('#p1 > div').css({ 'background': this.blue });
+    $('#p1 > div').css({ 'background': blue });
     $('#p2').css({ 'background': '#ffffff'});
-    $('#p2 > div').css({ 'background': this.blue });
-    this.setSize();
+    $('#p2 > div').css({ 'background': blue });
   }
 
-  setSize () {
-
+  setSize (p1, p2) {
     $( '#p1' ).progressbar({
-      value: this.state.p1
+      value: p1
     });
-
     $( '#p2' ).progressbar({
-      value: this.state.p2
+      value: p2
     });
   }
 
   render() {
-
     return (
       <div>
-        P1
-
+        <h3>Concentration Level</h3>
         <div id="p1"></div>
-
-        P2
         <div id="p2"></div>
-
       </div>
     );
-
   }
-
 }
 
 // new ViewBars()
-export default ViewBars;
+export default ViewBarsMany;
