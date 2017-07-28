@@ -55,13 +55,13 @@ class ViewBarsSingle extends React.Component {
     raw.shift();
     let sum = 0;
     raw.forEach((val) => {
-      sum += val
-    })
-    let avg = sum /  raw.length;
+      sum += val;
+    });
+    let avg = sum / raw.length;
     let low = -10;
     let high = 30;
     let abs = Math.abs(avg);
-    let scaled =  ( abs / ( high - low ) ) * 100;
+    let scaled = ( abs / ( high - low ) ) * 100;
     this.run(scaled, '#raw');
   }
 
@@ -80,13 +80,13 @@ class ViewBarsSingle extends React.Component {
     val = val * 2.55;
     val = Number.parseInt(val);
     val = val.toString(16);
-    if(dom === '#mellow'){
+    if (dom === '#mellow') {
       val = '#0000' + val;
     }
-    if(dom === '#concentration'){
+    if (dom === '#concentration') {
       val = '#00' + val + '00';
     }
-    if(dom === '#raw'){
+    if (dom === '#raw') {
       console.log('EEG', avgVal);
 
       val = '#' + val + '0000';
