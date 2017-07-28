@@ -14,7 +14,7 @@ MUSE COMMANDS
 () Start the OSC Client for the band 4B9F
 muse-io --device Muse-4B9F --osc osc.udp://localhost:5000
 () Start the OSC Client for fake data
-muse-player -f data.muse -s osc.udp://localhost:####
+muse-player -f data.muse -s osc.udp://localhost:5000
 
 REPOSITORY SETUP
 ()  yarn install
@@ -26,6 +26,8 @@ REPOSITORY SETUP
       - createdb wandering_wave
       - createuser test_user -l -s
       - knex migrate:latest
+()  setup postgres
+      - pg_ctl -D /usr/local/pgsql/data -l logfile start
 
 PRO FLOW CHEAT SHEET
 ()  Command L - Go to URL for quick Google Search.
