@@ -1,4 +1,4 @@
-import reducer from "./reducers";
+import reducer from './reducers';
 import { createStore, applyMiddleware } from 'redux';
 
 const logger = (store) => (next) => (action) => {
@@ -16,7 +16,5 @@ const error = (store) => (next) => (action) => {
 
 const middleWare = applyMiddleware(logger, error);
 
-console.log('Redux: middleware setup | store created')
-// looks like second parameter should be {}
-// const store = createStore(reducers, {}, middleWare);
-export default createStore(reducer, middleWare)
+// console.log('Redux: middleware setup | store created');
+export default createStore(reducer, {}, middleWare);

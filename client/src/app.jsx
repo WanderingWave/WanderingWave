@@ -10,8 +10,26 @@ import Signal from './components/signal.jsx';
 // redux
 import { Provider } from 'react-redux';
 import store from './store';
+import { connect } from 'react-redux';
 import './test'
 
+
+
+/*  uncomment to wire in redux to the props
+@connect((store) => {
+  return {
+      connected: store.connected,
+      matched: store.matched,
+      opponent: store.opponent,
+      player1: store.player1,
+      player2: store.player2,
+      name: store.name,
+      serial: store.serial
+  };
+});
+*/
+
+// this.props.test
 class App extends React.Component {
 
   constructor(props) {
@@ -124,5 +142,8 @@ class App extends React.Component {
     );
   }
 }
+const app = document.getElementById('root');
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render( <Provider store={store}>
+  <App/>
+  </Provider>, app );
