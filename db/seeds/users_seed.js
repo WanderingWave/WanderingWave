@@ -22,7 +22,7 @@ exports.seed = function (knex, Promise) {
       return models.Auth.forge({
         type: 'local',
         password: 'admin123',
-        profile_id: profile.get('id')
+        profiles_id: profile.get('id')
       }).save();
     })
     .error(err => {

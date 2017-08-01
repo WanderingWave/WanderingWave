@@ -3,6 +3,8 @@ const app = require('./app');
 const db = require('../db');
 const PORT = process.env.port || 3000;
 var osc = require('node-osc');
+const models = require('../db/models');
+const controllers = require('./controllers')
 
 // const remote = require('electron').remote
 // const main = remote.require('../main.js')
@@ -18,16 +20,39 @@ var map = {},
   dataPoints = {},
   playing = [],
   clients = {},
-  activeClients = {};
+  activeClients = {},
+  socketMap = {}
 
 //PLAYER CONNECTS
 io.sockets.on('connection', function(socket) {
+  console.log(socket.id)
+
+  //CREATE ID TO SOCKET MAPPING
+  socket.on('id', id => {
+    socketMap[id] = socket.id
+  })
+
+
+  //SEND FRIEND REQUEST
+  socket.on('createFriendRequest', (obj) => {
+    if (socketMap[obj.to]) {
+      io.to(socketMap[obj.to]).emit('receiveFriendRequest');
+    }
+
+    models.Notification.forge({ recipient: obj.to, sender: obj.from, type: 'friend request', status: 'active' })
+      .save()
+      .then(result => {
+        console.log('success')
+      })
+      .catch(err => {
+        console.log('error')
+      });
+
+    controllers.Notifications.getAll(2)
+
+  })
 
   socket.on('streamConnection', ({ name, serial }) => {
-
-
-    // main.openTerminal()
-
     console.log('connection starting to stream');
     clients[serial] = { serial, name, socketId: socket.id, isPlaying: false };
 

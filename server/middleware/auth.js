@@ -2,10 +2,12 @@ const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redisClient = require('redis').createClient();
 
+
 module.exports.verify = (req, res, next) => {
+  console.log('calling from auth middleware', req.user)
 
   if (req.isAuthenticated()) {
-    return next();
+    return next(); 
   }
   res.redirect('/login');
 };

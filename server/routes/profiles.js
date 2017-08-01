@@ -4,14 +4,25 @@ const router = express.Router();
 const ProfileController = require('../controllers').Profiles;
 
 router.route('/')
-  .get(ProfileController.getAll)
-  // .post(ProfileController.create)
-  ;
+
+  .get(() => {
+
+
+    // ProfileController.getOne(req, res)
+  })
+
+
+//   .get(ProfileController.getAll)
+// // .post(ProfileController.create)
+;
 
 router.route('/:id')
-  .get(ProfileController.getOne)
-  // .put(ProfileController.update)
-  // .delete(ProfileController.deleteOne)
-  ;
+  .get(() => {
+    console.log('hello', req.params.id)
+    // ProfileController.getOne(req, res)
+  })
+// .put(ProfileController.update)
+// .delete(ProfileController.deleteOne)
+;
 
 module.exports = router;

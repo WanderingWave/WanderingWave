@@ -1,5 +1,5 @@
 WORKFLOW
-(0) create a feature branch
+(0) create a feature branch and make sure you are on it
 (1) add, commit, 'push origin <branch>'
 (2) git fetch upstream
 (3) git merge upstream/master

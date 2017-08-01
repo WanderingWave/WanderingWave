@@ -24,7 +24,10 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+
+
 passport.use('google', new GoogleStrategy({
+  
   clientID: config.Google.clientID,
   clientSecret: config.Google.clientSecret,
   callbackURL: config.Google.callbackURL},
@@ -66,6 +69,7 @@ const getOrCreateOAuthProfile = (type, oauthProfile, done) => {
       return models.Profile.forge(profileInfo).save();
     })
     .tap(profile => {
+      console.log('************************', profile)
       return models.Auth.forge({
         type,
         profile_id: profile.get('id'),

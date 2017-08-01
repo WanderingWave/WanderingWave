@@ -4,7 +4,6 @@ import io from 'socket.io-client';
 import Connect from './components/connect.jsx';
 import Waiting from './components/waiting.jsx';
 import Gameboard from './components/gameboard.jsx';
-import ViewBars from './components/viewbars.jsx';
 import Signal from './components/signal.jsx';
 
 // const remote = require('electron').remote
@@ -17,15 +16,22 @@ class App extends React.Component {
       connected: false,
       matched: false,
       opponent: '',
+      opponentId: 1,
       player1: '',
       player2: '',
       name: '',
-      serial: ''
+      serial: '',
+      hasNotifications: null,
+      notificationsCount: null
     };
   }
 
   componentWillMount() {
+
+    // localStorage.setItem('id', 1)
     this.socket = io.connect();
+
+    // this.socket.emit('id', localStorage.getItem('id'))
 
     this.socket.on('matched', function(obj) {
       console.log(obj);
@@ -51,6 +57,20 @@ class App extends React.Component {
       console.log('current connection is ', currentConnection);
     });
 
+    this.socket.on('receiveFriendRequest', (obj) => {
+      this.setState({ hasNotifications: true })
+      console.log('Youve got a request')
+    });
+  }
+
+  setUser1() {
+    localStorage.setItem('id', 1)
+    this.socket.emit('id', localStorage.getItem('id'))
+  }
+
+  setUser2() {
+    localStorage.setItem('id', 2)
+    this.socket.emit('id', localStorage.getItem('id'))
   }
 
   handleConnect() {
@@ -79,26 +99,43 @@ class App extends React.Component {
 
   }
 
+  handleAddFriend(e) {
+    console.log('friend requested')
+    this.socket.emit('createFriendRequest', { from: localStorage.getItem('id'), to: e.target.getAttribute('data') })
+  }
+
   render() {
     let main = null;
+    let nav = null
 
     //NOT CONNECTED
     if (!this.state.connected) {
+      nav =
+        <div>
+          <h4>My Profile</h4>
+          <h4>Connect</h4>
+          <h4>Leaderboard</h4>
+          <h4>{'Notifications ' + this.state.notificationsCount}</h4>
+        </div>
       main =
         <div>
-      <Connect
-      handlePlay={this.handlePlay.bind(this)}
-      handleConnect={this.handleConnect.bind(this)}
-      />
-      <Signal socket={this.socket}/>
+          <button onClick={this.setUser1.bind(this)} data={1}>I'm Player 1</button>
+          <button onClick={this.setUser2.bind(this)} data={2}>I'm Player 2</button>
+          <button onClick={this.handleAddFriend.bind(this)} data={1}>Add Friend 1</button>
+          <button onClick={this.handleAddFriend.bind(this)} data={2}>Add Friend 2</button>
+          <Connect
+          handlePlay={this.handlePlay.bind(this)}
+          handleConnect={this.handleConnect.bind(this)}
+          />
+          <Signal socket={this.socket}/>
       </div>;
     }
     //WAITING FOR OPPONENT
     if (this.state.connected && !this.state.matched) {
       main =
         <div>
-      <Waiting />
-      </div>;
+          <Waiting />
+        </div>;
 
     }
 
@@ -106,15 +143,18 @@ class App extends React.Component {
     if (this.state.connected && this.state.matched) {
       main =
         <div>
-        <Gameboard opponent={this.state.opponent}
-        socket={this.socket}
-        player1={this.state.player1}
-        player2={this.state.player2}/>
-      </div>;
+          <Gameboard opponent={this.state.opponent}
+            opponentId={this.state.opponentId}
+            handleAddFriend={this.handleAddFriend.bind(this)}
+            socket={this.socket}
+            player1={this.state.player1}
+            player2={this.state.player2}/>
+        </div>;
     }
     return (
       <div>
-      {main}
+        {nav}
+        {main}
       </div>
     );
   }
