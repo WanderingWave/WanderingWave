@@ -30,7 +30,6 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/', routes.auth);
 app.use('/api', routes.api);
 app.use('/api/profiles', routes.profiles);
-app.use('/messages', routes.messages);
 
 app.post('/user', (req, res) => {
   messageController.create(req, res);

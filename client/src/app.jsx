@@ -6,14 +6,13 @@ import Waiting from './components/waiting.jsx';
 import Gameboard from './components/gameboard.jsx';
 import ViewBarsSingle from './components/ViewBarsSingle.jsx';
 import Signal from './components/signal.jsx';
+// const remote = require('electron').remote
 
 // redux
 import { Provider } from 'react-redux';
 import store from './store';
 import { connect } from 'react-redux';
 import './test'
-
-
 
 /*  uncomment to wire in redux to the props
 @connect((store) => {
@@ -30,6 +29,7 @@ import './test'
 */
 
 // this.props.test
+
 class App extends React.Component {
 
   constructor(props) {
@@ -38,15 +38,22 @@ class App extends React.Component {
       connected: false,
       matched: false,
       opponent: '',
+      opponentId: 1,
       player1: '',
       player2: '',
       name: '',
-      serial: ''
+      serial: '',
+      hasNotifications: null,
+      notificationsCount: null
     };
   }
 
   componentWillMount() {
+
+    // localStorage.setItem('id', 1)
     this.socket = io.connect();
+
+    // this.socket.emit('id', localStorage.getItem('id'))
 
     this.socket.on('matched', function(obj) {
       console.log(obj);
@@ -72,10 +79,24 @@ class App extends React.Component {
       // console.log('current connection is ', currentConnection);
     });
 
+    this.socket.on('receiveFriendRequest', (obj) => {
+      this.setState({ hasNotifications: true })
+      console.log('Youve got a request')
+    });
+  }
+
+  setUser1() {
+    localStorage.setItem('id', 1)
+    this.socket.emit('id', localStorage.getItem('id'))
+  }
+
+  setUser2() {
+    localStorage.setItem('id', 2)
+    this.socket.emit('id', localStorage.getItem('id'))
   }
 
   handleConnect() {
-
+    // remote.openTerminal()
     let name = document.getElementById('nickname').value;
     let serial = document.getElementById('serial').value;
 
@@ -87,9 +108,10 @@ class App extends React.Component {
       ['name', name],
       ['serial', serial]
     ]
-      .forEach(item => localStorage.setItem(item[0], String(item[1])));
+    .forEach(item => localStorage.setItem(item[0], String(item[1])));
 
     this.socket.emit('streamConnection', { name, serial });
+
   }
 
   handlePlay() {
@@ -99,20 +121,34 @@ class App extends React.Component {
 
   }
 
+  handleAddFriend(e) {
+    console.log('friend requested')
+    this.socket.emit('createFriendRequest', { from: localStorage.getItem('id'), to: e.target.getAttribute('data') })
+  }
+
   render() {
     let main = null;
+    let nav = null
 
     //NOT CONNECTED
     if (!this.state.connected) {
+      nav =
+        <div>
+          <h4>My Profile</h4>
+          <h4>Connect</h4>
+          <h4>Leaderboard</h4>
+          <h4>{'Notifications ' + this.state.notificationsCount}</h4>
+        </div>
       main =
-      <div>
-      <Connect
-      handlePlay={this.handlePlay.bind(this)}
-      handleConnect={this.handleConnect.bind(this)}
-      />
-      <Signal socket={this.socket}/>
-      <ViewBarsSingle socket={this.socket}/>
-
+        <div>
+          <button onClick={this.setUser1.bind(this)} data={1}>I'm Player 1</button>
+          <button onClick={this.setUser2.bind(this)} data={2}>I'm Player 2</button>
+          <Connect
+          handlePlay={this.handlePlay.bind(this)}
+          handleConnect={this.handleConnect.bind(this)}
+          />
+          <Signal socket={this.socket}/>
+          <ViewBarsSingle socket={this.socket}/>
       </div>;
     }
 
@@ -122,7 +158,6 @@ class App extends React.Component {
         <div>
           <Waiting />
         </div>;
-
     }
 
     //READY TO PLAY
@@ -130,13 +165,17 @@ class App extends React.Component {
       main =
         <div>
           <Gameboard opponent={this.state.opponent}
+            opponentId={this.state.opponentId}
+            handleAddFriend={this.handleAddFriend.bind(this)}
             socket={this.socket}
             player1={this.state.player1}
             player2={this.state.player2}/>
         </div>;
     }
+    
     return (
       <div>
+        {nav}
         {main}
       </div>
     );

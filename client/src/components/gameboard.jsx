@@ -2,6 +2,7 @@ import React from 'react';
 import * as d3 from 'd3';
 import io from 'socket.io-client';
 import _ from 'underscore';
+import Gameover from './gameover.jsx'
 
 class Gameboard extends React.Component {
 
@@ -91,8 +92,11 @@ class Gameboard extends React.Component {
     } else {
       return (
         <div>
-                <h1>Gameover</h1>
-                <h3>{this.state.winner} won the game!</h3>
+                <Gameover opponent={this.props.opponent}
+                opponentId={this.props.opponentId}
+                handleAddFriend = {this.props.handleAddFriend}
+                winner = {this.state.winner}
+                />
               </div>
       );
     }

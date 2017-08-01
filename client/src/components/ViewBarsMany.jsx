@@ -2,9 +2,10 @@ import React from 'react';
 import $ from 'jquery';
 import 'jqueryui';
 
+
 class ViewBarsMany extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       p1: 0,
@@ -13,8 +14,8 @@ class ViewBarsMany extends React.Component {
     // this.makeData(1000);
   }
 
-  makeData (i) {
-    let id = setInterval(()=>{
+  makeData(i) {
+    let id = setInterval(() => {
       this.state.p1 += 10;
       if (this.state.p1 === 100 || this.state.p2 === 100) {
         clearInterval(id);
@@ -22,6 +23,7 @@ class ViewBarsMany extends React.Component {
       this.updateBars();
     }, i);
   }
+
 
   componentDidMount () {
     this.props.socket.on('testConnection', function(val) {
@@ -40,6 +42,7 @@ class ViewBarsMany extends React.Component {
     this.setSize(p1, p2);
   }
 
+
   easeBars () {
     setInterval( () => {
       this.run();
@@ -56,6 +59,7 @@ class ViewBarsMany extends React.Component {
     val = '#0000' + val;
     this.blue = val;
   }
+
 
   setColor (blue) {
     $('#p1').css({ 'background': '#ffffff'});

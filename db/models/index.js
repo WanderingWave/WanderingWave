@@ -1,3 +1,4 @@
 module.exports.Auth = require('./auths');
 module.exports.Profile = require('./profiles');
-module.exports.Message = require('./messages');
+module.exports.Notification = require('./notifications');
+module.exports.Contact = require('./contacts');
