@@ -4,9 +4,31 @@ import io from 'socket.io-client';
 import Connect from './components/connect.jsx';
 import Waiting from './components/waiting.jsx';
 import Gameboard from './components/gameboard.jsx';
+import ViewBarsSingle from './components/ViewBarsSingle.jsx';
 import Signal from './components/signal.jsx';
-
 // const remote = require('electron').remote
+
+// redux
+import { Provider } from 'react-redux';
+import store from './store';
+import { connect } from 'react-redux';
+import './test'
+
+/*  uncomment to wire in redux to the props
+@connect((store) => {
+  return {
+      connected: store.connected,
+      matched: store.matched,
+      opponent: store.opponent,
+      player1: store.player1,
+      player2: store.player2,
+      name: store.name,
+      serial: store.serial
+  };
+});
+*/
+
+// this.props.test
 
 class App extends React.Component {
 
@@ -54,7 +76,7 @@ class App extends React.Component {
     }.bind(this));
 
     this.socket.on('testConnection', function(currentConnection) {
-      console.log('current connection is ', currentConnection);
+      // console.log('current connection is ', currentConnection);
     });
 
     this.socket.on('receiveFriendRequest', (obj) => {
@@ -126,6 +148,7 @@ class App extends React.Component {
           handleConnect={this.handleConnect.bind(this)}
           />
           <Signal socket={this.socket}/>
+          <ViewBarsSingle socket={this.socket}/>
       </div>;
     }
 
@@ -158,5 +181,8 @@ class App extends React.Component {
     );
   }
 }
+const app = document.getElementById('root');
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render( <Provider store={store}>
+  <App/>
+  </Provider>, app );
