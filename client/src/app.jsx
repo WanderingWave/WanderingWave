@@ -5,8 +5,31 @@ import Connect from './components/connect.jsx';
 import Waiting from './components/waiting.jsx';
 import Gameboard from './components/gameboard.jsx';
 import ViewBarsSingle from './components/ViewBarsSingle.jsx';
-import Signal from './components/signal.jsx'
+import Signal from './components/signal.jsx';
 
+// redux
+import { Provider } from 'react-redux';
+import store from './store';
+import { connect } from 'react-redux';
+import './test'
+
+
+
+/*  uncomment to wire in redux to the props
+@connect((store) => {
+  return {
+      connected: store.connected,
+      matched: store.matched,
+      opponent: store.opponent,
+      player1: store.player1,
+      player2: store.player2,
+      name: store.name,
+      serial: store.serial
+  };
+});
+*/
+
+// this.props.test
 class App extends React.Component {
 
   constructor(props) {
@@ -82,15 +105,6 @@ class App extends React.Component {
     //NOT CONNECTED
     if (!this.state.connected) {
       main =
-// <<<<<<< HEAD
-//         <div>
-//           {<ViewBars socket={this.socket}/>}
-//           <Connect
-//             handlePlay={this.handlePlay.bind(this)}
-//             handleConnect={this.handleConnect.bind(this)}
-//           />
-//         </div>;
-// =======
       <div>
       <Connect
       handlePlay={this.handlePlay.bind(this)}
@@ -100,8 +114,8 @@ class App extends React.Component {
       <ViewBarsSingle socket={this.socket}/>
 
       </div>;
-// >>>>>>> upstream/master
     }
+
     //WAITING FOR OPPONENT
     if (this.state.connected && !this.state.matched) {
       main =
@@ -128,5 +142,8 @@ class App extends React.Component {
     );
   }
 }
+const app = document.getElementById('root');
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render( <Provider store={store}>
+  <App/>
+  </Provider>, app );

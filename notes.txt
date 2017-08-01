@@ -1,0 +1,8 @@
+Features
+ - background
+ - ball
+ - rewind
+
+Redux
+ - no longer have to pass callbackd down
+ - 

@@ -26,7 +26,7 @@ REPOSITORY SETUP
       - createdb wandering_wave
       - createuser test_user -l -s
       - knex migrate:latest
-()  setup postgres
+()  start postgres
       - pg_ctl -D /usr/local/pgsql/data -l logfile start
 
 PRO FLOW CHEAT SHEET
