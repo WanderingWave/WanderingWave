@@ -8,7 +8,6 @@ module.exports.addContact = (senderId, recipientId) => {
     .then(({ rows }) => {
       console.log('this is the raw sequel', rows)
     })
-
 }
 
 module.exports.getContacts = (id) => {

@@ -121,8 +121,6 @@ class App extends React.Component {
         <div>
           <button onClick={this.setUser1.bind(this)} data={1}>I'm Player 1</button>
           <button onClick={this.setUser2.bind(this)} data={2}>I'm Player 2</button>
-          <button onClick={this.handleAddFriend.bind(this)} data={1}>Add Friend 1</button>
-          <button onClick={this.handleAddFriend.bind(this)} data={2}>Add Friend 2</button>
           <Connect
           handlePlay={this.handlePlay.bind(this)}
           handleConnect={this.handleConnect.bind(this)}
@@ -130,13 +128,13 @@ class App extends React.Component {
           <Signal socket={this.socket}/>
       </div>;
     }
+
     //WAITING FOR OPPONENT
     if (this.state.connected && !this.state.matched) {
       main =
         <div>
           <Waiting />
         </div>;
-
     }
 
     //READY TO PLAY
@@ -151,6 +149,7 @@ class App extends React.Component {
             player2={this.state.player2}/>
         </div>;
     }
+    
     return (
       <div>
         {nav}
